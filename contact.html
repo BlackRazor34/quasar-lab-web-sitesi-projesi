@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quasar.lab - İletişim</title>
+    <script>
+        // Sayfa yüklenmeden önce temayı uygula (titremeyi önlemek için)
+        (function() {
+            const theme = localStorage.getItem('theme') || 'dark-theme';
+            document.documentElement.className = theme;
+        })();
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="left-panel">
+            <div class="logo">
+                <img src="images/websitelogo.jpg" alt="Quasar.lab Logo" class="logo-main-image">
+                <span class="logo-main-text">QUASAR.LAB</span>
+                <img src="images/benimmarkam.png" alt="İmza" class="logo-signature">
+            </div>
+            <div class="menu">
+                <p>MENÜ</p>
+                <ul>
+                    <li><a href="index.html"><img src="images/vector_7_754.svg" alt="Kullanıcı Detayları"> Hakkımda</a></li>
+                    <li><a href="quantum_technology.html"><img src="images/vector_7_752.svg" alt="Kişilik Tipi"> Kuantum & Teknoloji</a></li>
+                    <li><a href="projects.html"><img src="images/vector_7_746.svg" alt="Projeler"> Projeler</a></li>
+                    <li><a href="skills.html"><img src="images/vector_7_748.svg" alt="Yetenekler"> Yetenekler</a></li>
+                    <li><a href="blog.html"><img src="images/vector_7_744.svg" alt="Blog"> Blog</a></li>
+                    <li class="active"><a href="contact.html"><img src="images/vector_7_750.svg" alt="İletişim"> İletişim</a></li>
+                    <li><a href="about_site.html"><img src="images/vector_7_750.svg" alt="Site Hakkında"> Site Hakkında</a></li>
+                </ul>
+            </div>
+            <div class="archetype-badge">
+                <a href="goals_vision.html">
+                    <img src="images/vector_7_756.svg" alt="Hedefler & Vizyon">
+                    <div>
+                        <p>Hedefler & Vizyon</p>
+                    </div>
+                </a>
+            </div>
+            <button id="theme-toggle">Temayı Değiştir</button>
+        </div>
+        <div class="main-content">
+            <div class="header">
+                <p>Quasar.lab / İletişim</p>
+            </div>
+            <div class="content-placeholder">
+                <h1>İletişim</h1>
+                <p>Bana aşağıdaki kanallardan ulaşabilirsiniz.</p>
+                <div id="contact-info-container" class="contact-info">
+                    <!-- İletişim bilgileri buraya dinamik olarak eklenecek -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const container = document.getElementById('contact-info-container');
+            const contacts = JSON.parse(localStorage.getItem('contactInfo')) || [];
+
+            if (contacts.length === 0) {
+                container.innerHTML = '<p>İletişim bilgileri yakında eklenecektir.</p>';
+            } else {
+                contacts.forEach(contact => {
+                    const item = document.createElement('div');
+                    item.className = 'contact-item';
+                    
+                    let icon = 'images/vector_7_750.svg'; // Varsayılan ikon
+                    let link = contact.value;
+
+                    if (contact.type === 'E-posta') {
+                        icon = 'images/vector_7_750.svg'; // E-posta ikonu
+                        link = 'mailto:' + contact.value;
+                    } else if (contact.type === 'GitHub') {
+                        icon = 'images/vector_7_746.svg'; // Proje/GitHub ikonu
+                    } else if (contact.type === 'LinkedIn') {
+                        icon = 'images/vector_7_754.svg'; // Kullanıcı/LinkedIn ikonu
+                    }
+
+                    item.innerHTML = `
+                        <img src="${icon}" alt="${contact.type}">
+                        <a href="${link}" target="_blank">${contact.value}</a>
+                    `;
+                    container.appendChild(item);
+                });
+            }
+        });
+    </script>
+</body>
+</html>

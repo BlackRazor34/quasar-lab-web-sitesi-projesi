@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quasar.lab - Site Hakkında</title>
+    <script>
+        // Sayfa yüklenmeden önce temayı uygula (titremeyi önlemek için)
+        (function() {
+            const theme = localStorage.getItem('theme') || 'dark-theme';
+            document.documentElement.className = theme;
+        })();
+    </script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="left-panel">
+            <div class="logo">
+                <img src="images/websitelogo.jpg" alt="Quasar.lab Logo" class="logo-main-image">
+                <span class="logo-main-text">QUASAR.LAB</span>
+                <img src="images/benimmarkam.png" alt="İmza" class="logo-signature">
+            </div>
+            <div class="menu">
+                <p>MENÜ</p>
+                <ul>
+                    <li><a href="index.html"><img src="images/vector_7_754.svg" alt="Kullanıcı Detayları"> Hakkımda</a></li>
+                    <li><a href="quantum_technology.html"><img src="images/vector_7_752.svg" alt="Kişilik Tipi"> Kuantum & Teknoloji</a></li>
+                    <li><a href="projects.html"><img src="images/vector_7_746.svg" alt="Projeler"> Projeler</a></li>
+                    <li><a href="skills.html"><img src="images/vector_7_748.svg" alt="Yetenekler"> Yetenekler</a></li>
+                    <li><a href="blog.html"><img src="images/vector_7_744.svg" alt="Blog"> Blog</a></li>
+                    <li><a href="contact.html"><img src="images/vector_7_750.svg" alt="İletişim"> İletişim</a></li>
+                    <li><a href="about_site.html"><img src="images/vector_7_750.svg" alt="Site Hakkında"> Site Hakkında</a></li>
+                </ul>
+            </div>
+            <div class="archetype-badge">
+                <a href="goals_vision.html">
+                    <img src="images/vector_7_756.svg" alt="Hedefler & Vizyon">
+                    <div>
+                        <p>Hedefler & Vizyon</p>
+                    </div>
+                </a>
+            </div>
+            <button id="theme-toggle">Temayı Değiştir</button>
+        </div>
+        <div class="main-content">
+            <div class="header">
+                <p>Quasar.lab / Site Hakkında</p>
+            </div>
+            <div class="content-placeholder">
+                <h1>Site Hakkında</h1>
+                <p>Quasar.lab, teknoloji ve bilimin kesişim noktasında, özellikle yapay zeka, kuantum bilişim ve uzay bilimleri gibi alanlarda bilgi paylaşımını hedefleyen kişisel bir platformdur. Bu site, karmaşık konuları anlaşılır bir dille sunarak, meraklı zihinlere ilham vermeyi amaçlamaktadır.</p>
+                <img src="images/quasar.png" alt="Quasar Logo" class="content-image">
+                <p>Sitenin amacı, hem kişisel projeleri ve deneyimleri paylaşmak hem de teknoloji dünyasındaki son gelişmeleri takip edenler için bir kaynak oluşturmaktır. Bilim ve teknolojinin geleceğine dair düşüncelerin, analizlerin ve yorumların yer aldığı bir merkez olmayı hedefliyoruz.</p>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

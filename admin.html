@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yönetim Paneli</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Lato', sans-serif;
+            margin: 0;
+            padding: 40px;
+            background-color: #1a1a1a;
+            color: #e0e0e0;
+        }
+        h1, h2, h3 {
+            font-family: 'Montserrat', sans-serif;
+        }
+        .login-container, .dashboard-container {
+            background-color: #111111;
+            padding: 40px;
+            border-radius: 10px;
+            border: 1px solid #292A36;
+            width: 100%;
+            max-width: 800px; /* Genişletildi */
+            margin: 0 auto; /* Ortalandı */
+            text-align: center;
+        }
+        .login-container {
+            max-width: 400px;
+        }
+        .login-container h1 {
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #292A36;
+            background-color: #1a1a1a;
+            color: #e0e0e0;
+            font-size: 16px;
+            box-sizing: border-box; /* Önemli */
+        }
+        .form-group textarea {
+            min-height: 200px;
+            resize: vertical;
+        }
+        .action-button {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            background-color: #7152DA;
+            color: #FFFFFF;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+        }
+        .action-button:hover {
+            background-color: #5c43b3;
+        }
+        #error-message, #success-message {
+            margin-top: 15px;
+            display: none;
+        }
+        #error-message { color: #ff6b6b; }
+        #success-message { color: #6bff81; }
+
+        .dashboard-container {
+            display: none; /* Başlangıçta gizli */
+        }
+        .edit-section {
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 1px solid #292A36;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="login-section">
+        <div class="login-container">
+            <h1>Yönetici Girişi</h1>
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="username">Kullanıcı Adı</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Şifre</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit" class="action-button">Giriş Yap</button>
+                <p id="error-message">Kullanıcı adı veya şifre hatalı.</p>
+            </form>
+        </div>
+    </div>
+
+    <div id="dashboard-section" class="dashboard-container">
+        <h2>Yönetim Paneli</h2>
+        <p>Hoş geldiniz! Buradan site içeriğini yönetebilirsiniz.</p>
+        <a href="index.html" target="_blank" style="margin-bottom: 15px; display: inline-block;">Siteyi Yeni Sekmede Görüntüle</a>
+
+        <div class="edit-section">
+            <h3>Hakkımda Sayfası İçeriği</h3>
+            <form id="about-form">
+                <div class="form-group">
+                    <label for="about-text">Açıklama Metni</label>
+                    <textarea id="about-text" name="about-text" required></textarea>
+                </div>
+                <button type="submit" class="action-button">Hakkımda Metnini Kaydet</button>
+                <p id="success-message-about" class="success-message">Hakkımda metni başarıyla güncellendi!</p>
+            </form>
+        </div>
+
+        <div class="edit-section">
+            <h3>Projeleri Yönet</h3>
+            <div id="project-list">
+                <!-- Projeler buraya dinamik olarak eklenecek -->
+            </div>
+            <hr style="border-color: #292A36; margin: 30px 0;">
+            <h4>Yeni Proje Ekle</h4>
+            <form id="project-form">
+                <div class="form-group">
+                    <label for="project-title">Proje Başlığı</label>
+                    <input type="text" id="project-title" required>
+                </div>
+                <div class="form-group">
+                    <label for="project-desc">Proje Açıklaması</label>
+                    <textarea id="project-desc" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="project-link">Proje Linki (opsiyonel)</label>
+                    <input type="url" id="project-link">
+                </div>
+                <button type="submit" class="action-button">Yeni Projeyi Ekle</button>
+                <p id="success-message-project" class="success-message">Proje başarıyla eklendi/güncellendi!</p>
+            </form>
+        </div>
+
+        <div class="edit-section">
+            <h3>Yetenekleri Yönet</h3>
+            <div id="skill-list">
+                <!-- Yetenekler buraya dinamik olarak eklenecek -->
+            </div>
+            <hr style="border-color: #292A36; margin: 30px 0;">
+            <h4>Yeni Yetenek Ekle</h4>
+            <form id="skill-form">
+                <div class="form-group">
+                    <label for="skill-name">Yetenek Adı (örn: Python)</label>
+                    <input type="text" id="skill-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="skill-icon">Simge URL'si (örn: images/python-icon.svg)</label>
+                    <input type="text" id="skill-icon">
+                </div>
+                <button type="submit" class="action-button">Yeni Yetenek Ekle</button>
+                <p id="success-message-skill" class="success-message">Yetenek başarıyla eklendi!</p>
+            </form>
+        </div>
+
+        <div class="edit-section">
+            <h3>Blog Yazılarını Yönet</h3>
+            <div id="blog-post-list">
+                <!-- Blog yazıları buraya dinamik olarak eklenecek -->
+            </div>
+            <hr style="border-color: #292A36; margin: 30px 0;">
+            <h4>Yeni Blog Yazısı Ekle</h4>
+            <form id="blog-post-form">
+                <div class="form-group">
+                    <label for="blog-post-title">Yazı Başl��ğı</label>
+                    <input type="text" id="blog-post-title" required>
+                </div>
+                 <div class="form-group">
+                    <label for="blog-post-image">Resim URL'si (örn: images/blog-resmi.jpg)</label>
+                    <input type="text" id="blog-post-image">
+                </div>
+                <div class="form-group">
+                    <label for="blog-post-content">Yazı İçeriği</label>
+                    <textarea id="blog-post-content" required></textarea>
+                </div>
+                <button type="submit" class="action-button">Yeni Yazıyı Yayımla</button>
+                <p id="success-message-blog" class="success-message">Blog yazısı başarıyla yayımlandı!</p>
+            </form>
+        </div>
+
+        <div class="edit-section">
+            <h3>Hedefler & Vizyon Sayfası</h3>
+            <form id="vision-form">
+                <div class="form-group">
+                    <label for="vision-text">Sayfa İçeriği</label>
+                    <textarea id="vision-text" required></textarea>
+                </div>
+                <button type="submit" class="action-button">Vizyon Metnini Kaydet</button>
+                <p id="success-message-vision" class="success-message">İçerik başarıyla güncellendi!</p>
+            </form>
+        </div>
+
+        <div class="edit-section">
+            <h3>Kuantum & Teknoloji Sayfası Yönetimi</h3>
+            <div id="quantum-post-list">
+                <!-- Kuantum içerikleri buraya dinamik olarak eklenecek -->
+            </div>
+            <hr style="border-color: #292A36; margin: 30px 0;">
+            <h4>Yeni İçerik Ekle</h4>
+            <form id="quantum-form">
+                 <div class="form-group">
+                    <label for="quantum-title">Başlık</label>
+                    <input type="text" id="quantum-title" required>
+                </div>
+                 <div class="form-group">
+                    <label for="quantum-image">Resim URL'si (opsiyonel)</label>
+                    <input type="text" id="quantum-image">
+                </div>
+                <div class="form-group">
+                    <label for="quantum-text">İçerik</label>
+                    <textarea id="quantum-text" required></textarea>
+                </div>
+                <button type="submit" class="action-button">Yeni İçeriği Ekle</button>
+                <p id="success-message-quantum" class="success-message">İçerik başarıyla eklendi!</p>
+            </form>
+        </div>
+
+        <div class="edit-section">
+            <h3>İletişim Bilgilerini Yönet</h3>
+            <div id="contact-list">
+                <!-- İletişim bilgileri buraya gelecek -->
+            </div>
+            <hr style="border-color: #292A36; margin: 30px 0;">
+            <h4>Yeni İletişim Bilgisi Ekle</h4>
+            <form id="contact-form">
+                <div class="form-group">
+                    <label for="contact-type">Tür</label>
+                    <select id="contact-type" required>
+                        <option value="E-posta">E-posta</option>
+                        <option value="GitHub">GitHub</option>
+                        <option value="LinkedIn">LinkedIn</option>
+                        <option value="Telefon">Telefon</option>
+                        <option value="Diğer">Diğer</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="contact-value">Değer (E-posta adresi veya profil URL'si)</label>
+                    <input type="text" id="contact-value" required>
+                </div>
+                <button type="submit" class="action-button">Yeni İletişim Bilgisi Ekle</button>
+                <p id="success-message-contact" class="success-message">İletişim bilgisi eklendi!</p>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // --- DOM Elementleri ---
+        const loginForm = document.getElementById('login-form');
+        const loginSection = document.getElementById('login-section');
+        const dashboardSection = document.getElementById('dashboard-section');
+        const errorMessage = document.getElementById('error-message');
+        
+        // Formlar ve Mesajlar
+        const aboutForm = document.getElementById('about-form');
+        const aboutTextarea = document.getElementById('about-text');
+        const successMessageAbout = document.getElementById('success-message-about');
+
+        const projectForm = document.getElementById('project-form');
+        const projectTitleInput = document.getElementById('project-title');
+        const projectDescTextarea = document.getElementById('project-desc');
+        const projectLinkInput = document.getElementById('project-link');
+        const projectListDiv = document.getElementById('project-list');
+        const successMessageProject = document.getElementById('success-message-project');
+
+        // Yetenek Formu
+        const skillForm = document.getElementById('skill-form');
+        const skillNameInput = document.getElementById('skill-name');
+        const skillIconInput = document.getElementById('skill-icon');
+        const skillListDiv = document.getElementById('skill-list');
+        const successMessageSkill = document.getElementById('success-message-skill');
+
+        const blogPostForm = document.getElementById('blog-post-form');
+        const blogPostTitleInput = document.getElementById('blog-post-title');
+        const blogPostImageInput = document.getElementById('blog-post-image');
+        const blogPostContentTextarea = document.getElementById('blog-post-content');
+        const blogPostListDiv = document.getElementById('blog-post-list');
+        const successMessageBlog = document.getElementById('success-message-blog');
+
+        const visionForm = document.getElementById('vision-form');
+        const visionTextarea = document.getElementById('vision-text');
+        const successMessageVision = document.getElementById('success-message-vision');
+
+        const quantumForm = document.getElementById('quantum-form');
+        const quantumTitleInput = document.getElementById('quantum-title');
+        const quantumImageInput = document.getElementById('quantum-image');
+        const quantumTextarea = document.getElementById('quantum-text');
+        const quantumPostListDiv = document.getElementById('quantum-post-list');
+        const successMessageQuantum = document.getElementById('success-message-quantum');
+
+        const contactForm = document.getElementById('contact-form');
+        const contactTypeInput = document.getElementById('contact-type');
+        const contactValueInput = document.getElementById('contact-value');
+        const contactListDiv = document.getElementById('contact-list');
+        const successMessageContact = document.getElementById('success-message-contact');
+
+        // --- Genel Fonksiyonlar ---
+        function showSuccessMessage(element) {
+            element.style.display = 'block';
+            setTimeout(() => { element.style.display = 'none'; }, 3000);
+        }
+
+        // --- Giriş Mantığı ---
+        loginForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            if (event.target.username.value === 'admin' && event.target.password.value === '12345') {
+                loginSection.style.display = 'none';
+                dashboardSection.style.display = 'block';
+                loadAboutContent();
+                loadProjects();
+                loadSkills();
+                loadBlogPosts();
+                loadVisionContent();
+                loadQuantumContent();
+                loadContactInfo();
+            } else {
+                errorMessage.style.display = 'block';
+            }
+        });
+
+        // --- LocalStorage Get/Set Fonksiyonları ---
+        const getFromLS = (key) => JSON.parse(localStorage.getItem(key)) || [];
+        const saveToLS = (key, data) => localStorage.setItem(key, JSON.stringify(data));
+
+        // --- Hakkımda Yönetimi ---
+        function loadAboutContent() {
+            const savedText = localStorage.getItem('aboutPageContent');
+            if (savedText) aboutTextarea.value = savedText;
+        }
+        aboutForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            localStorage.setItem('aboutPageContent', aboutTextarea.value);
+            showSuccessMessage(successMessageAbout);
+        });
+
+        // --- Proje Yönetimi ---
+        function loadProjects() {
+            projectListDiv.innerHTML = '';
+            const projects = getFromLS('projects');
+            if (projects.length === 0) projectListDiv.innerHTML = '<p>Henüz proje eklenmemiş.</p>';
+            projects.forEach((p, i) => {
+                const el = document.createElement('div');
+                el.className = 'item-manage-box';
+                el.innerHTML = `<span>${p.title}</span><button onclick="deleteItem('projects', ${i}, loadProjects)" class="delete-button">Sil</button>`;
+                projectListDiv.appendChild(el);
+            });
+        }
+        projectForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const newItem = { title: projectTitleInput.value, description: projectDescTextarea.value, link: projectLinkInput.value };
+            const items = getFromLS('projects');
+            items.push(newItem);
+            saveToLS('projects', items);
+            projectForm.reset();
+            loadProjects();
+            showSuccessMessage(successMessageProject);
+        });
+
+        // --- Yetenek Yönetimi ---
+        function loadSkills() {
+            skillListDiv.innerHTML = '';
+            const skills = getFromLS('skills');
+            if (skills.length === 0) skillListDiv.innerHTML = '<p>Henüz yetenek eklenmemiş.</p>';
+            skills.forEach((s, i) => {
+                const el = document.createElement('div');
+                el.className = 'item-manage-box';
+                el.innerHTML = `<span>${s.name}</span><button onclick="deleteItem('skills', ${i}, loadSkills)" class="delete-button">Sil</button>`;
+                skillListDiv.appendChild(el);
+            });
+        }
+        skillForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const newItem = { 
+                name: skillNameInput.value,
+                icon: skillIconInput.value 
+            };
+            const items = getFromLS('skills');
+            items.push(newItem);
+            saveToLS('skills', items);
+            skillForm.reset();
+            loadSkills();
+            showSuccessMessage(successMessageSkill);
+        });
+
+        // --- Blog Yönetimi ---
+        function loadBlogPosts() {
+            blogPostListDiv.innerHTML = '';
+            const posts = getFromLS('blogPosts');
+            if (posts.length === 0) blogPostListDiv.innerHTML = '<p>Henüz blog yazısı eklenmemiş.</p>';
+            posts.forEach((p, i) => {
+                const el = document.createElement('div');
+                el.className = 'item-manage-box';
+                el.innerHTML = `<span>${p.title}</span><button onclick="deleteItem('blogPosts', ${i}, loadBlogPosts)" class="delete-button">Sil</button>`;
+                blogPostListDiv.appendChild(el);
+            });
+        }
+        blogPostForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const newItem = { 
+                title: blogPostTitleInput.value, 
+                image: blogPostImageInput.value,
+                content: blogPostContentTextarea.value,
+                date: new Date().toLocaleDateString('tr-TR')
+            };
+            const items = getFromLS('blogPosts');
+            items.push(newItem);
+            saveToLS('blogPosts', items);
+            blogPostForm.reset();
+            loadBlogPosts();
+            showSuccessMessage(successMessageBlog);
+        });
+
+        // --- Vizyon Yönetimi ---
+        function loadVisionContent() {
+            const savedText = localStorage.getItem('visionPageContent');
+            if (savedText) visionTextarea.value = savedText;
+        }
+        visionForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            localStorage.setItem('visionPageContent', visionTextarea.value);
+            showSuccessMessage(successMessageVision);
+        });
+
+        // --- Kuantum Yönetimi (Liste Tabanlı) ---
+        function loadQuantumContent() {
+            quantumPostListDiv.innerHTML = '';
+            const posts = getFromLS('quantumPageContent');
+            if (posts.length === 0) {
+                quantumPostListDiv.innerHTML = '<p>Henüz kuantum içeriği eklenmemiş.</p>';
+                return;
+            }
+            posts.forEach((p, i) => {
+                const el = document.createElement('div');
+                el.className = 'item-manage-box';
+                el.innerHTML = `<span>${p.title}</span><button onclick="deleteItem('quantumPageContent', ${i}, loadQuantumContent)" class="delete-button">Sil</button>`;
+                quantumPostListDiv.appendChild(el);
+            });
+        }
+        quantumForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const newItem = {
+                title: quantumTitleInput.value,
+                image: quantumImageInput.value,
+                text: quantumTextarea.value,
+                date: new Date().toLocaleDateString('tr-TR')
+            };
+            const items = getFromLS('quantumPageContent');
+            items.push(newItem);
+            saveToLS('quantumPageContent', items);
+            quantumForm.reset();
+            loadQuantumContent();
+            showSuccessMessage(successMessageQuantum);
+        });
+
+        // --- İletişim Yönetimi ---
+        function loadContactInfo() {
+            contactListDiv.innerHTML = '';
+            const contacts = getFromLS('contactInfo');
+            if (contacts.length === 0) contactListDiv.innerHTML = '<p>Henüz iletişim bilgisi eklenmemiş.</p>';
+            contacts.forEach((c, i) => {
+                const el = document.createElement('div');
+                el.className = 'item-manage-box';
+                el.innerHTML = `<span><strong>${c.type}:</strong> ${c.value}</span><button onclick="deleteItem('contactInfo', ${i}, loadContactInfo)" class="delete-button">Sil</button>`;
+                contactListDiv.appendChild(el);
+            });
+        }
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const newItem = { 
+                type: contactTypeInput.value, 
+                value: contactValueInput.value 
+            };
+            const items = getFromLS('contactInfo');
+            items.push(newItem);
+            saveToLS('contactInfo', items);
+            contactForm.reset();
+            loadContactInfo();
+            showSuccessMessage(successMessageContact);
+        });
+
+        // --- Genel Silme Fonksiyonu ---
+        function deleteItem(key, index, refreshFunction) {
+            if (confirm('Bu öğeyi silmek istediğinizden emin misiniz?')) {
+                const items = getFromLS(key);
+                items.splice(index, 1);
+                saveToLS(key, items);
+                refreshFunction();
+            }
+        }
+    </script>
+    <style>
+        .success-message { display: none; color: #6bff81; }
+        .item-manage-box {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #292A36;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        .delete-button {
+            background-color: #ff6b6b;
+            color: white;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quasar.lab - Yetenekler</title>
+    <script>
+        // Sayfa yüklenmeden önce temayı uygula (titremeyi önlemek için)
+        (function() {
+            const theme = localStorage.getItem('theme') || 'dark-theme';
+            document.documentElement.className = theme;
+        })();
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="left-panel">
+            <div class="logo">
+                <img src="images/websitelogo.jpg" alt="Quasar.lab Logo" class="logo-main-image">
+                <span class="logo-main-text">QUASAR.LAB</span>
+                <img src="images/benimmarkam.png" alt="İmza" class="logo-signature">
+            </div>
+            <div class="menu">
+                <p>MENÜ</p>
+                <ul>
+                    <li><a href="index.html"><img src="images/vector_7_754.svg" alt="Kullanıcı Detayları"> Hakkımda</a></li>
+                    <li><a href="quantum_technology.html"><img src="images/vector_7_752.svg" alt="Kişilik Tipi"> Kuantum & Teknoloji</a></li>
+                    <li><a href="projects.html"><img src="images/vector_7_746.svg" alt="Projeler"> Projeler</a></li>
+                    <li class="active"><a href="skills.html"><img src="images/vector_7_748.svg" alt="Yetenekler"> Yetenekler</a></li>
+                    <li><a href="blog.html"><img src="images/vector_7_744.svg" alt="Blog"> Blog</a></li>
+                    <li><a href="contact.html"><img src="images/vector_7_750.svg" alt="İletişim"> İletişim</a></li>
+                    <li><a href="about_site.html"><img src="images/vector_7_750.svg" alt="Site Hakkında"> Site Hakkında</a></li>
+                </ul>
+            </div>
+            <div class="archetype-badge">
+                <a href="goals_vision.html">
+                    <img src="images/vector_7_756.svg" alt="Hedefler & Vizyon">
+                    <div>
+                        <p>Hedefler & Vizyon</p>
+                    </div>
+                </a>
+            </div>
+            <button id="theme-toggle">Temayı Değiştir</button>
+        </div>
+        <div class="main-content">
+            <div class="header">
+                <p>Quasar.lab / Yetenekler</p>
+            </div>
+            <div class="content-placeholder">
+                <h1>Yeteneklerim</h1>
+                <p>Burada sahip olduğum teknik ve sosyal yetenekleri bulabilirsiniz.</p>
+                <div id="skills-list-container" class="skills-container">
+                    <!-- Yetenek kartları buraya dinamik olarak eklenecek -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const skillsContainer = document.getElementById('skills-list-container');
+            const skills = JSON.parse(localStorage.getItem('skills')) || [];
+
+            if (skills.length === 0) {
+                skillsContainer.innerHTML = '<p>Henüz gösterilecek bir yetenek yok. Lütfen yönetici panelinden ekleyin.</p>';
+            } else {
+                skills.forEach(skill => {
+                    const skillCard = document.createElement('div');
+                    skillCard.className = 'skill-card';
+                    
+                    // Eğer ikon belirtilmemişse varsayılan bir ikon kullan
+                    const iconSrc = skill.icon || 'images/vector_7_748.svg';
+
+                    skillCard.innerHTML = `
+                        <img src="${iconSrc}" alt="${skill.name} ikonu" class="skill-icon">
+                        <h3>${skill.name}</h3>
+                    `;
+                    skillsContainer.appendChild(skillCard);
+                });
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quasar.lab - Kuantum & Teknoloji</title>
+    <script>
+        // Sayfa yüklenmeden önce temayı uygula (titremeyi önlemek için)
+        (function() {
+            const theme = localStorage.getItem('theme') || 'dark-theme';
+            document.documentElement.className = theme;
+        })();
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="left-panel">
+            <div class="logo">
+                <img src="images/websitelogo.jpg" alt="Quasar.lab Logo" class="logo-main-image">
+                <span class="logo-main-text">QUASAR.LAB</span>
+                <img src="images/benimmarkam.png" alt="İmza" class="logo-signature">
+            </div>
+            <div class="menu">
+                <p>MENÜ</p>
+                <ul>
+                    <li><a href="index.html"><img src="images/vector_7_754.svg" alt="Kullanıcı Detayları"> Hakkımda</a></li>
+                    <li class="active"><a href="quantum_technology.html"><img src="images/vector_7_752.svg" alt="Kişilik Tipi"> Kuantum & Teknoloji</a></li>
+                    <li><a href="projects.html"><img src="images/vector_7_746.svg" alt="Projeler"> Projeler</a></li>
+                    <li><a href="skills.html"><img src="images/vector_7_748.svg" alt="Yetenekler"> Yetenekler</a></li>
+                    <li><a href="blog.html"><img src="images/vector_7_744.svg" alt="Blog"> Blog</a></li>
+                    <li><a href="contact.html"><img src="images/vector_7_750.svg" alt="İletişim"> İletişim</a></li>
+                    <li><a href="about_site.html"><img src="images/vector_7_750.svg" alt="Site Hakkında"> Site Hakkında</a></li>
+                </ul>
+            </div>
+            <div class="archetype-badge">
+                <a href="goals_vision.html">
+                    <img src="images/vector_7_756.svg" alt="Hedefler & Vizyon">
+                    <div>
+                        <p>Hedefler & Vizyon</p>
+                    </div>
+                </a>
+            </div>
+            <button id="theme-toggle">Temayı Değiştir</button>
+        </div>
+        <div class="main-content">
+            <div class="header">
+                <p>Quasar.lab / Kuantum & Teknoloji</p>
+            </div>
+            <div id="quantum-content-container" class="content-placeholder">
+                <!-- İçerik buraya dinamik olarak eklenecek -->
+            </div>
+
+            <div id="arxiv-container" class="content-placeholder" style="margin-top: 60px;">
+                <h2>Son Makaleler</h2>
+                <p id="arxiv-loading">Yükleniyor...</p>
+                <div id="arxiv-list"></div>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const container = document.getElementById('quantum-content-container');
+            const savedData = JSON.parse(localStorage.getItem('quantumPageContent')) || [];
+
+            if (savedData.length > 0) {
+                // Yazıları en yeniden en eskiye doğru göstermek için diziyi tersine çevir
+                savedData.reverse().forEach(content => {
+                    const postEl = document.createElement('div');
+                    postEl.className = 'blog-post'; // Blog stiliyle uyumlu olsun
+
+                    const formattedText = content.text ? content.text.replace(/\n/g, '<br>') : '';
+                    let imageHTML = '';
+                    if (content.image) {
+                        imageHTML = `<img src="${content.image}" alt="${content.title}" class="content-image">`;
+                    }
+
+                    postEl.innerHTML = `
+                        <h2>${content.title}</h2>
+                        <p class="post-meta">Yayınlanma Tarihi: ${content.date}</p>
+                        ${imageHTML}
+                        <p>${formattedText}</p>
+                    `;
+                    container.appendChild(postEl);
+                });
+            } else {
+                // Varsayılan içerik
+                container.innerHTML = `
+                    <h1>Kuantum & Teknoloji</h1>
+                    <p>Bu alanda henüz bir içerik paylaşılmadı. Lütfen yönetici panelinden içerik ekleyin.</p>
+                `;
+            }
+        });
+    </script>
+    <style>
+        .post-meta {
+            font-size: 16px;
+            color: #57596B;
+            margin-bottom: 20px;
+        }
+        .blog-post {
+            margin-bottom: 40px;
+            padding-bottom: 40px;
+            border-bottom: 1px solid #333;
+        }
+        .blog-post:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+    </style>
+</body>
+</html>
