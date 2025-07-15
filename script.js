@@ -14,6 +14,15 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // Hakkımda sayfasındaki içeriği localStorage'dan yükle
+    const aboutContentEl = document.getElementById('about-content');
+    if (aboutContentEl) {
+        const savedText = localStorage.getItem('aboutPageContent');
+        if (savedText) {
+            aboutContentEl.innerHTML = savedText.replace(/\n/g, '<br>'); // Satır sonlarını <br> ile değiştir
+        }
+    }
+
     // Hangi sayfada olduğumuzu kontrol edip ilgili API fonksiyonlarını çağır
     if (document.getElementById('apod-container')) {
         fetchAPOD();
@@ -88,28 +97,22 @@ async function fetchArxiv(category, listId, loadingId) {
     const listEl = document.getElementById(listId);
     if (!listEl) return;
 
-    const searchQuery = `cat:${category}`;
-    const maxResults = 10;
-    // arXiv API'si CORS sorunları yaşatabildiği için bir proxy üzerinden gitmek daha güvenilirdir.
-    // Geçici çözüm olarak allorigins.win proxy'sini kullanıyoruz.
-    const url = `https://api.allorigins.win/get?url=${encodeURIComponent(`http://export.arxiv.org/api/query?search_query=${searchQuery}&sortBy=submittedDate&sortOrder=descending&max_results=${maxResults}`)}`;
+    const url = `/api/arxiv?category=${category}`;
 
     try {
         const response = await fetch(url);
-        if (!response.ok) throw new Error(`Proxy isteği başarısız: ${response.status}`);
-        const data = await response.json();
-        const xmlText = data.contents;
+        if (!response.ok) throw new Error(`Sunucu hatası: ${response.status}`);
+        const xmlText = await response.text();
         
-        if (!xmlText) throw new Error("Proxy'den boş yanıt geldi.");
-
         const parser = new DOMParser();
         const xmlDoc = parser.parseFromString(xmlText, "text/xml");
         const entries = Array.from(xmlDoc.getElementsByTagName('entry'));
 
         if (loadingEl) loadingEl.remove();
 
-        if (entries.length === 0) {
-            listEl.textContent = 'Bu kategoride güncel makale bulunamadı.';
+        if (entries.length === 0 || xmlDoc.querySelector('parsererror')) {
+            listEl.textContent = 'Bu kategoride güncel makale bulunamadı veya API yanıtı hatalı.';
+            console.error("Parser Error:", xmlDoc.querySelector('parsererror')?.textContent);
             return;
         }
 
@@ -133,7 +136,7 @@ async function fetchArxiv(category, listId, loadingId) {
 
     } catch (error) {
         console.error('arXiv hatası:', error);
-        if (loadingEl) loadingEl.textContent = 'Makaleler yüklenirken bir hata oluştu. Lütfen daha sonra tekrar deneyin.';
+        if (loadingEl) loadingEl.textContent = 'Makaleler yüklenirken bir hata oluştu. Lütfen sunucunun çalıştığından emin olun ve tekrar deneyin.';
     }
 }
 
@@ -144,42 +147,21 @@ async function fetchPubMed() {
     const listEl = document.getElementById('pubmed-list');
     if (!listEl) return;
 
-    const searchTerm = '("CRISPR"[Title/Abstract] OR "bioinformatics"[Title/Abstract]) AND "data analysis"[Title/Abstract]';
-    const maxResults = 10;
-    const eutils = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/';
-    const searchUrl = `${eutils}esearch.fcgi?db=pubmed&term=${encodeURIComponent(searchTerm)}&retmax=${maxResults}&sort=pub_date&usehistory=y`;
-    
-    // PubMed API'si için de proxy kullanmak tarayıcı hatalarını önleyebilir.
-    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(searchUrl)}`;
+    const url = '/api/pubmed';
 
     try {
-        const searchResponse = await fetch(proxyUrl);
-        if (!searchResponse.ok) throw new Error(`PubMed arama proxy isteği başarısız: ${searchResponse.status}`);
-        const searchData = await searchResponse.json();
-        const searchXmlText = searchData.contents;
-
-        const parser = new DOMParser();
-        const searchXmlDoc = parser.parseFromString(searchXmlText, "text/xml");
-        const idList = Array.from(searchXmlDoc.getElementsByTagName('Id')).map(id => id.textContent);
-
-        if (idList.length === 0) {
-            if (loadingEl) loadingEl.remove();
-            listEl.textContent = 'İlgili makale bulunamadı.';
-            return;
-        }
-
-        const summaryUrl = `${eutils}esummary.fcgi?db=pubmed&id=${idList.join(',')}&retmode=json`;
-        const summaryProxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(summaryUrl)}`;
-        
-        const summaryResponse = await fetch(summaryProxyUrl);
-        if (!summaryResponse.ok) throw new Error(`PubMed özet proxy isteği başarısız: ${summaryResponse.status}`);
-        const summaryData = await summaryResponse.json();
-        const summaryJson = JSON.parse(summaryData.contents);
-
+        const response = await fetch(url);
+        if (!response.ok) throw new Error(`Sunucu hatası: ${response.status}`);
+        const summaryData = await response.json();
 
         if (loadingEl) loadingEl.remove();
 
-        const result = summaryJson.result;
+        const result = summaryData.result;
+        if (!result || Object.keys(result).length <= 1) { // uids'den başka bir şey yoksa
+             listEl.textContent = 'İlgili makale bulunamadı.';
+             return;
+        }
+
         for (const uid in result) {
             if (uid === "uids") continue;
 
@@ -202,7 +184,7 @@ async function fetchPubMed() {
 
     } catch (error) {
         console.error('PubMed hatası:', error);
-        if (loadingEl) loadingEl.textContent = 'Makaleler yüklenirken bir hata oluştu. Lütfen daha sonra tekrar deneyin.';
+        if (loadingEl) loadingEl.textContent = 'Makaleler yüklenirken bir hata oluştu. Lütfen sunucunun çalıştığından emin olun ve tekrar deneyin.';
     }
 }
 
