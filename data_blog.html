@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quasar.lab - Kuantum & Teknoloji</title>
+    <title>Quasar.lab - Veritabanları & SQL</title>
     <script>
-        // Sayfa yüklenmeden önce temayı uygula (titremeyi önlemek için)
         (function() {
             const theme = localStorage.getItem('theme') || 'dark-theme';
             document.documentElement.className = theme;
@@ -28,10 +27,10 @@
                 <p>MENÜ</p>
                 <ul>
                     <li><a href="index.html"><img src="images/vector_7_754.svg" alt="Kullanıcı Detayları"> Hakkımda</a></li>
-                    <li class="active"><a href="quantum_technology.html"><img src="images/vector_7_752.svg" alt="Kişilik Tipi"> Kuantum & Teknoloji</a></li>
+                    <li><a href="quantum_technology.html"><img src="images/vector_7_752.svg" alt="Kişilik Tipi"> Kuantum & Teknoloji</a></li>
                     <li><a href="projects.html"><img src="images/vector_7_746.svg" alt="Projeler"> Projeler</a></li>
                     <li><a href="skills.html"><img src="images/vector_7_748.svg" alt="Yetenekler"> Yetenekler</a></li>
-                    <li><a href="blog.html"><img src="images/vector_7_744.svg" alt="Blog"> Blog</a></li>
+                    <li class="active"><a href="blog.html"><img src="images/vector_7_744.svg" alt="Blog"> Bilgi Merkezi</a></li>
                     <li><a href="contact.html"><img src="images/vector_7_750.svg" alt="İletişim"> İletişim</a></li>
                     <li><a href="about_site.html"><img src="images/vector_7_750.svg" alt="Site Hakkında"> Site Hakkında</a></li>
                 </ul>
@@ -48,14 +47,14 @@
         </div>
         <div class="main-content">
             <div class="header">
-                <p>Quasar.lab / Kuantum & Teknoloji</p>
+                <p>Quasar.lab / Bilgi Merkezi / Veritabanları & SQL</p>
             </div>
             <div class="content-placeholder">
-                <h1>Kuantum Teknolojileri Alanındaki Son Gelişmeler</h1>
-                <p>Kuantum fiziği (quant-ph) kategorisindeki en güncel akademik yayınlar aşağıda listelenmiştir. Kaynak: <a href="https://arxiv.org/" target="_blank">arXiv.org</a></p>
-                <div id="quantum-arxiv-container" class="api-container">
-                    <p id="quantum-arxiv-loading">Makaleler yükleniyor...</p>
-                    <div id="quantum-arxiv-list" class="api-list"></div>
+                <h1>Veritabanları (cs.DB) Alanındaki Son Gelişmeler</h1>
+                <p>Veritabanları (cs.DB) kategorisindeki en güncel akademik yayınlar aşağıda listelenmiştir. Kaynak: <a href="https://arxiv.org/" target="_blank">arXiv.org</a></p>
+                <div id="data-arxiv-container" class="api-container">
+                    <p id="data-arxiv-loading">Makaleler yükleniyor...</p>
+                    <div id="data-arxiv-list" class="api-list"></div>
                 </div>
             </div>
         </div>
