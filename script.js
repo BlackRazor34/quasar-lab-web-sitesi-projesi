@@ -14,14 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Hakkımda sayfasındaki içeriği localStorage'dan yükle
-    const aboutContentEl = document.getElementById('about-content');
-    if (aboutContentEl) {
-        const savedText = localStorage.getItem('aboutPageContent');
-        if (savedText) {
-            aboutContentEl.innerHTML = savedText.replace(/\n/g, '<br>'); // Satır sonlarını <br> ile değiştir
-        }
-    }
+    
 
     // Hangi sayfada olduğumuzu kontrol edip ilgili API fonksiyonlarını çağır
     if (document.getElementById('apod-container')) {
@@ -97,11 +90,12 @@ async function fetchArxiv(category, listId, loadingId) {
     const listEl = document.getElementById(listId);
     if (!listEl) return;
 
-    const url = `/api/arxiv?category=${category}`;
+    // arXiv API'sine doğrudan istek yapılıyor
+    const url = `https://export.arxiv.org/api/query?search_query=cat:${category}&start=0&max_results=10&sortBy=submittedDate&sortOrder=descending`;
 
     try {
         const response = await fetch(url);
-        if (!response.ok) throw new Error(`Sunucu hatası: ${response.status}`);
+        if (!response.ok) throw new Error(`arXiv API hatası: ${response.status}`);
         const xmlText = await response.text();
         
         const parser = new DOMParser();
@@ -136,7 +130,7 @@ async function fetchArxiv(category, listId, loadingId) {
 
     } catch (error) {
         console.error('arXiv hatası:', error);
-        if (loadingEl) loadingEl.textContent = 'Makaleler yüklenirken bir hata oluştu. Lütfen sunucunun çalıştığından emin olun ve tekrar deneyin.';
+        if (loadingEl) loadingEl.textContent = 'Makaleler yüklenirken bir hata oluştu. Lütfen tarayıcı konsolunu kontrol edin.';
     }
 }
 
@@ -147,18 +141,35 @@ async function fetchPubMed() {
     const listEl = document.getElementById('pubmed-list');
     if (!listEl) return;
 
-    const url = '/api/pubmed';
+    // PubMed API'sine doğrudan istek yapılıyor
+    const searchTerm = "((crispr[Title/Abstract]) OR (bioinformatics[Title/Abstract]) OR (genomics[Title/Abstract])) AND (hasabstract[text])";
+    const eutilsBase = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/';
+    const searchUrl = `${eutilsBase}esearch.fcgi?db=pubmed&term=${encodeURIComponent(searchTerm)}&retmax=10&sort=pub_date&usehistory=y&retmode=json`;
 
     try {
-        const response = await fetch(url);
-        if (!response.ok) throw new Error(`Sunucu hatası: ${response.status}`);
-        const summaryData = await response.json();
+        // 1. Adım: Makale ID'lerini ara
+        const searchResponse = await fetch(searchUrl);
+        if (!searchResponse.ok) throw new Error(`PubMed ESearch isteği başarısız: ${searchResponse.status}`);
+        const searchData = await searchResponse.json();
+        const idList = searchData.esearchresult.idlist;
+
+        if (!idList || idList.length === 0) {
+            if (loadingEl) loadingEl.remove();
+            listEl.textContent = 'İlgili konuda güncel makale bulunamadı.';
+            return;
+        }
+
+        // 2. Adım: ID'leri kullanarak makale özetlerini al
+        const summaryUrl = `${eutilsBase}esummary.fcgi?db=pubmed&id=${idList.join(',')}&retmode=json`;
+        const summaryResponse = await fetch(summaryUrl);
+        if (!summaryResponse.ok) throw new Error(`PubMed ESummary isteği başarısız: ${summaryResponse.status}`);
+        const summaryData = await summaryResponse.json();
 
         if (loadingEl) loadingEl.remove();
 
         const result = summaryData.result;
         if (!result || Object.keys(result).length <= 1) { // uids'den başka bir şey yoksa
-             listEl.textContent = 'İlgili makale bulunamadı.';
+             listEl.textContent = 'Makale detayları alınamadı.';
              return;
         }
 
@@ -184,7 +195,7 @@ async function fetchPubMed() {
 
     } catch (error) {
         console.error('PubMed hatası:', error);
-        if (loadingEl) loadingEl.textContent = 'Makaleler yüklenirken bir hata oluştu. Lütfen sunucunun çalıştığından emin olun ve tekrar deneyin.';
+        if (loadingEl) loadingEl.textContent = 'Makaleler yüklenirken bir hata oluştu. Lütfen tarayıcı konsolunu kontrol edin.';
     }
 }
 
